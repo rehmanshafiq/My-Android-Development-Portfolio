@@ -21,9 +21,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import contactsdiary.shafiq.com.MainActivity;
 import contactsdiary.shafiq.com.R;
+import contactsdiary.shafiq.com.db_helper.DatabaseHelper;
 import contactsdiary.shafiq.com.models.Contact;
 import contactsdiary.shafiq.com.utils.InitPermission;
 import contactsdiary.shafiq.com.utils.UniversalImageLoader;
@@ -85,9 +87,25 @@ public class AddContactFragment extends Fragment implements ChangePhotoDialog.On
         ivCheckMark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: saving the edited contact.");
-
+                Log.d(TAG, "onClick: attemptin to save new contact.");
                 //execute the save method for the database.
+                if (checkStringIfNull(mName.getText().toString())) {
+                    Log.d(TAG, "onClick: saving new contact." + mName.getText().toString());
+
+                    DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+                    Contact contact = new Contact(mName.getText().toString(),
+                            mPhoneNumber.getText().toString(),
+                            mSelectDevice.getSelectedItem().toString(),
+                            mEmail.getText().toString(),
+                            mSelectedImagePath);
+
+                    if (databaseHelper.addContact(contact)) {
+                        Toast.makeText(getActivity(), "Contact Saved", Toast.LENGTH_SHORT).show();
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    } else {
+                        Toast.makeText(getActivity(), "Error Saving", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
@@ -125,6 +143,19 @@ public class AddContactFragment extends Fragment implements ChangePhotoDialog.On
         initOnTextChangedListener();
 
         return view;
+    }
+
+    /**
+     * check if string is null or not
+     * @param text
+     * @return
+     */
+    private boolean checkStringIfNull(String text) {
+        if (!text.equals("")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
