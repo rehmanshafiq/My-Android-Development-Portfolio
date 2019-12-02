@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Contacts Diary</string>
+    <string name="hint">Find Contacts</string>
+    <string name="wayn">Wayn Baloch</string>
+
+    <!-- Fragments Strings -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_contact_fragment">EditContactFragment</string>
+    <string name="add_contact_fragment">AddContactFragment</string>
+    <string name="contact_fragment">ContactFragment</string>
+    <string name="view_contacts_fragment">ViewContactsFragment</string>
+    <string name="edit">Edit Contact</string>
+    <string name="change_photo">Change Photo</string>
+    <string name="take_new_photo">Take new photo</string>
+    <string name="choose">Choose photo from memory</string>
+    <string name="cancle">CANCEL</string>
+    <string name="change_photo_dialog">ChangePhotoDialog</string>
+    <string name="edit_contact">Edit Contact</string>
+    <string name="add_contact">Add Contact</string>
+
+    <!-- Fragments Strings -->
+    <string name="contact">Contact</string>
+
+    <string-array name="device_options">
+        <item>Mobile</item>
+        <item>Home</item>
+        <item>Home Fax</item>
+        <item>Work</item>
+        <item>Work Fax</item>
+        <item>Pager</item>
+        <item>Other</item>
+    </string-array>
+</resources>
