@@ -61,9 +61,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_4, contact.getEmail());
         contentValues.put(COL_5, contact.getProfileImage());
 
-        long resulr = db.insert(TABLE_NAME, null, contentValues);
+        long result = db.insert(TABLE_NAME, null, contentValues);
 
-        if (resulr == -1) {
+        if (result == -1) {
             return false;
         } else {
             return true;
