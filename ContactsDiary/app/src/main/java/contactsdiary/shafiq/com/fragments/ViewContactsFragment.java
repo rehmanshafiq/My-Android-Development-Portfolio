@@ -1,6 +1,7 @@
 package contactsdiary.shafiq.com.fragments;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,12 +19,17 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 import contactsdiary.shafiq.com.R;
 import contactsdiary.shafiq.com.adapters.ContactListAdapter;
+import contactsdiary.shafiq.com.db_helper.DatabaseHelper;
 import contactsdiary.shafiq.com.models.Contact;
 
 public class ViewContactsFragment extends Fragment {
@@ -126,42 +132,70 @@ public class ViewContactsFragment extends Fragment {
     private void setupContactsList() {
 
         final ArrayList<Contact> contacts = new ArrayList<>();
-        contacts.add(new Contact("Wayn Baloch", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Rodrygo Goes", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Gareth Bale", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Marco Asensio", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Vinicius Jr", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Lucas Vazquez", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Toni Kroos", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Fede Valverde", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Luka Modric", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Casemiro Enrique", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Sergio Ramos", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Raphael Varane", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Dani Carvajal", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Marcelo Veira", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Karim Benzema", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Eden Hazard", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
-        contacts.add(new Contact("Isco Alarcon", "0322-8583173", "Mobile",
-                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Wayn Baloch", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Rodrygo Goes", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Gareth Bale", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Marco Asensio", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Vinicius Jr", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Lucas Vazquez", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Toni Kroos", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Fede Valverde", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Luka Modric", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Casemiro Enrique", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Sergio Ramos", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Raphael Varane", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Dani Carvajal", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Marcelo Veira", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Karim Benzema", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Eden Hazard", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
+//        contacts.add(new Contact("Isco Alarcon", "0322-8583173", "Mobile",
+//                "wayn@baloch.com", textImageUrl));
 
-        mAdapter = new ContactListAdapter(getActivity(), R.layout.layout_contactslistitem, contacts, "https://");
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        Cursor cursor = databaseHelper.getAllContacts();
+
+        // iterate through all the rows contained in the database
+        if (!cursor.moveToNext()) {
+            Toast.makeText(getActivity(), "There are no Contacts to show", Toast.LENGTH_SHORT).show();
+        }
+
+        while (cursor.moveToNext()) {
+            contacts.add(new Contact(
+                    cursor.getString(1), // name
+                    cursor.getString(2), // phone number
+                    cursor.getString(3), // device
+                    cursor.getString(4), // email
+                    cursor.getString(5) // profile photo url
+            ));
+        }
+
+        Log.d(TAG, "setupContactsList: image url " + contacts.get(0).getProfileImage());
+
+        // sort the arrayList based on the contact name
+        Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+        
+        mAdapter = new ContactListAdapter(getActivity(), R.layout.layout_contactslistitem, contacts, "");
 
         mSearchContacts.addTextChangedListener(new TextWatcher() {
             @Override
