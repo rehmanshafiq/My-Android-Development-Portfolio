@@ -104,7 +104,7 @@ public class ContactFragment extends Fragment {
 
     private void init() {
         mContactName.setText(mContact.getName());
-        UniversalImageLoader.setImage(mContact.getProfileImage(), mContactImage, null, "https://");
+        UniversalImageLoader.setImage(mContact.getProfileImage(), mContactImage, null, "");
 
         ArrayList<String> properties = new ArrayList<>();
         properties.add(mContact.getPhoneNumber());

@@ -148,7 +148,7 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
         mPhoneNumber.setText(mContact.getPhoneNumber());
         mName.setText(mContact.getName());
         mEmail.setText(mContact.getEmail());
-        UniversalImageLoader.setImage(mContact.getProfileImage(), mContactImage, null, "https://");
+        UniversalImageLoader.setImage(mContact.getProfileImage(), mContactImage, null, "");
 
         // Setting the selected device to the spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.device_options,
