@@ -1,6 +1,7 @@
 package contactsdiary.shafiq.com.fragments;
 
 
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,9 +22,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import contactsdiary.shafiq.com.MainActivity;
 import contactsdiary.shafiq.com.R;
+import contactsdiary.shafiq.com.db_helper.DatabaseHelper;
 import contactsdiary.shafiq.com.models.Contact;
 import contactsdiary.shafiq.com.utils.InitPermission;
 import contactsdiary.shafiq.com.utils.UniversalImageLoader;
@@ -104,8 +107,35 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: saving the edited contact.");
-
                 //execute the save method for the database.
+
+                if (checkStringIfNull(mName.getText().toString())) {
+                    Log.d(TAG, "onClick: saving changes to the contact " + mName.getText().toString());
+
+                    // get database helper and save the contact
+                    DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+                    Cursor cursor = databaseHelper.getContactID(mContact);
+
+                    int contactID = -1;
+
+                    while (cursor.moveToNext()) {
+                        contactID = cursor.getInt(0);
+                    }
+                    if (contactID > -1) {
+                        if (mSelectedImagePath != null) {
+                            mContact.setProfileImage(mSelectedImagePath);
+                        }
+                        mContact.setName(mName.getText().toString());
+                        mContact.setPhoneNumber(mPhoneNumber.getText().toString());
+                        mContact.setDevice(mSelectDevice.getSelectedItem().toString());
+                        mContact.setEmail(mEmail.getText().toString());
+
+                        databaseHelper.updateContact(mContact, contactID);
+                        Toast.makeText(getActivity(), "Contact Update", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Database Error", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
@@ -141,6 +171,19 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
         });
 
         return view;
+    }
+
+    /**
+     * check if string is null or not
+     * @param text
+     * @return
+     */
+    private boolean checkStringIfNull(String text) {
+        if (text.equals("")) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private void init() {
