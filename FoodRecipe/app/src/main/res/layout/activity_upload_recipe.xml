@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UploadRecipeActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="30dp"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:id="@+id/iv_imageFood"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/imagenot"
+            android:scaleType="centerCrop"/>
+
+        <EditText
+            android:id="@+id/txt_recipe_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Recipe Name"
+            android:textSize="19sp"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/txt_recipe_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:textSize="19sp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/txt_recipe_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price"
+            android:textSize="19sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btSelect"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Select Image"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            android:background="@drawable/button_background"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/btUpload"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Upload Image"
+            android:textSize="22sp"
+            android:textColor="#fff"
+            android:background="@drawable/button_background"/>
+
+    </LinearLayout>
+
+</ScrollView>
